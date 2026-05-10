@@ -218,7 +218,7 @@
 
     .summary-grid {
       display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
       gap: 14px;
       margin: 22px 0 0;
     }
@@ -341,11 +341,19 @@
             <strong id="waterOutput">224 ml</strong>
           </div>
           <div class="summary-item">
-            <span>Rijstijd</span>
-            <strong id="rijstijdOutput">2 uur</strong>
+            <span>Zout</span>
+            <strong id="zoutOutput">8 g</strong>
           </div>
           <div class="summary-item">
-            <span>Pizza's</span>
+            <span>Olijfolie</span>
+            <strong id="olieOutput">10 ml</strong>
+          </div>
+          <div class="summary-item">
+            <span>Gist</span>
+            <strong id="gistOutput">8 g</strong>
+          </div>
+          <div class="summary-item">
+            <span>Pizza's/personen</span>
             <strong id="pizzaOutput">2</strong>
           </div>
         </section>
@@ -353,8 +361,8 @@
         <section class="section" aria-labelledby="stepsTitle">
           <h2 id="stepsTitle">Bereidingswijze</h2>
           <ol class="steps">
-            <li>Start met het mixen van het water met het zout en de olijfolie in de beslagkom.</li>
-            <li>Voeg hier al mixend het bloem aan toe en mix deze met een machine, of mixer met deeghaken, tot een geheel en elastisch deeg.</li>
+            <li>Start met het mixen van het water (<span id="stepWater">0 ml</span>) met het zout (<span id="stepZout">0 g</span>) en de olijfolie (<span id="stepOlie">0 ml</span>) in de beslagkom.</li>
+            <li>Voeg hier al mixend de bloem (<span id="stepBloem">0 g</span>) en de gist (<span id="stepGist">0 g</span>) aan toe en mix dit met een machine, of mixer met deeghaken, tot een geheel en elastisch deeg.</li>
             <li>Wanneer het deeg een mooi elastische structuur heeft laat deze dan ongeveer 20 tot 30 minuten rusten op kamer temperatuur.</li>
             <li>Kneed nu het deeg opnieuw goed door en verdeel het in gelijke stukken, afhankelijk van hoeveel pizza's je gaat maken.</li>
             <li id="riseStep">Laat het deeg nu volgens bovenstaande gekozen rijstijd op kamertemperatuur en afgedekt rijzen.</li>
@@ -374,7 +382,14 @@
     const personenOutput = document.getElementById("personenOutput");
     const bloemOutput = document.getElementById("bloemOutput");
     const waterOutput = document.getElementById("waterOutput");
-    const rijstijdOutput = document.getElementById("rijstijdOutput");
+    const zoutOutput = document.getElementById("zoutOutput");
+    const olieOutput = document.getElementById("olieOutput");
+    const gistOutput = document.getElementById("gistOutput");
+    const stepWater = document.getElementById("stepWater");
+    const stepZout = document.getElementById("stepZout");
+    const stepOlie = document.getElementById("stepOlie");
+    const stepGist = document.getElementById("stepGist");
+    const stepBloem = document.getElementById("stepBloem");
     const pizzaOutput = document.getElementById("pizzaOutput");
     const riseStep = document.getElementById("riseStep");
     const year = document.getElementById("year");
@@ -396,11 +411,27 @@
       const bloem = personen * GRAM_BLOEM_PER_PERSOON;
       const factor = bloem / 100;
       const water = afrondenOpHalf(56 * factor);
+      const zout = afrondenOpHalf(2 * factor);
+      const olie = afrondenOpHalf(2.5 * factor);
+
+      let gistPer100 = 0;
+      if (rijstijd === 24) gistPer100 = 0.5;
+      else if (rijstijd === 5) gistPer100 = 1;
+      else if (rijstijd === 2) gistPer100 = 2;
+
+      const gist = afrondenOpHalf(gistPer100 * factor);
 
       personenOutput.textContent = personen;
       bloemOutput.textContent = `${formatNumber(bloem)} g`;
       waterOutput.textContent = `${formatNumber(water)} ml`;
-      rijstijdOutput.textContent = `${rijstijd} uur`;
+      zoutOutput.textContent = `${formatNumber(zout)} g`;
+      olieOutput.textContent = `${formatNumber(olie)} ml`;
+      gistOutput.textContent = `${formatNumber(gist)} g`;
+      stepWater.textContent = `${formatNumber(water)} ml`;
+      stepZout.textContent = `${formatNumber(zout)} g`;
+      stepOlie.textContent = `${formatNumber(olie)} ml`;
+      stepGist.textContent = `${formatNumber(gist)} g`;
+      stepBloem.textContent = `${formatNumber(bloem)} g`;
       pizzaOutput.textContent = formatNumber(personen);
 
       if (rijstijd === 24) {
